@@ -108,19 +108,6 @@ export function AddTaskModal({ githubToken, agentModels, onClose, onTaskAdded }:
             />
           </div>
 
-          {/* Agent Models Info */}
-          <div className="bg-slate-800/30 rounded-lg p-4">
-            <h3 className="text-sm font-medium text-blue-100 mb-3">Agent Models</h3>
-            <div className="grid grid-cols-2 gap-3 text-sm">
-              {Object.entries(agentModels).map(([agent, model]) => (
-                <div key={agent} className="flex items-center justify-between">
-                  <span className="text-slate-400 capitalize">{agent.replace(/([A-Z])/g, ' $1').trim()}:</span>
-                  <span className="text-white font-mono">{model || 'Not set'}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
           {/* Error Message */}
           {error && (
             <div className="bg-red-900/20 border border-red-500/50 rounded-lg p-3">
