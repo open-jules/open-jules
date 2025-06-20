@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus } from 'lucide-react';
+import { X, Plus, Sparkles } from 'lucide-react';
 import { RepoSelector } from './RepoSelector';
 
 interface AddTaskModalProps {
@@ -14,7 +14,47 @@ export function AddTaskModal({ githubToken, agentModels, onClose, onTaskAdded }:
   const [selectedBranch, setSelectedBranch] = useState<string>('');
   const [taskPrompt, setTaskPrompt] = useState<string>('');
   const [loading, setLoading] = useState(false);
+  const [rewriting, setRewriting] = useState(false);
   const [error, setError] = useState<string>('');
+
+  const handleRewritePrompt = async () => {
+    if (!taskPrompt.trim()) {
+      setError('Please enter a task description first');
+      return;
+    }
+
+    // Use the first available model for rewriting, or default to 'llama3'
+    const rewriteModel = Object.values(agentModels).find(model => model) || 'llama3';
+    
+    setRewriting(true);
+    setError('');
+
+    try {
+      const response = await fetch('http://localhost:3001/api/rewrite-prompt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: taskPrompt,
+          model: rewriteModel
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to rewrite prompt');
+      }
+
+      const data = await response.json();
+      setTaskPrompt(data.improvedPrompt);
+    } catch (error) {
+      console.error('Error rewriting prompt:', error);
+      setError((error as Error).message);
+    } finally {
+      setRewriting(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,9 +135,30 @@ export function AddTaskModal({ githubToken, agentModels, onClose, onTaskAdded }:
 
           {/* Task Description */}
           <div>
-            <label className="block text-sm font-medium text-blue-100 mb-2">
-              Task Description
-            </label>
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-sm font-medium text-blue-100">
+                Task Description
+              </label>
+              <button
+                type="button"
+                onClick={handleRewritePrompt}
+                disabled={rewriting || !taskPrompt.trim()}
+                className="flex items-center space-x-2 px-3 py-1 text-xs bg-purple-600 hover:bg-purple-700 disabled:bg-slate-600 rounded-lg text-white font-medium transition-colors disabled:cursor-not-allowed"
+                title="Use AI to improve this task description"
+              >
+                {rewriting ? (
+                  <>
+                    <div className="animate-spin w-3 h-3 border-2 border-white/30 border-t-white rounded-full"></div>
+                    <span>Rewriting...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-3 h-3" />
+                    <span>Rewrite with AI</span>
+                  </>
+                )}
+              </button>
+            </div>
             <textarea
               value={taskPrompt}
               onChange={(e) => setTaskPrompt(e.target.value)}

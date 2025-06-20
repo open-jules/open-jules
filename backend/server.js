@@ -164,6 +164,45 @@ app.get('/api/models', async (req, res) => {
   }
 });
 
+// Rewrite task prompt
+app.post('/api/rewrite-prompt', async (req, res) => {
+  try {
+    const { prompt, model } = req.body;
+    
+    if (!prompt) {
+      return res.status(400).json({ error: 'Prompt is required' });
+    }
+
+    if (!model) {
+      return res.status(400).json({ error: 'Model is required' });
+    }
+
+    const systemPrompt = `You are an expert at improving task descriptions for AI coding assistants. Your job is to take a user's task description and rewrite it to be more clear, specific, and actionable.
+
+Guidelines for improvement:
+1. Make the task more specific and detailed
+2. Add context about what should be accomplished
+3. Clarify any ambiguous requirements
+4. Structure the description in a logical way
+5. Include relevant technical details
+6. Make it easier for AI agents to understand and implement
+7. Keep the original intent and scope
+
+Return ONLY the improved task description, nothing else.`;
+
+    const userPrompt = `Original task description: ${prompt}
+
+Please rewrite this task description to be more clear, specific, and actionable for AI coding assistants.`;
+
+    const improvedPrompt = await ollamaService.generateResponse(model, userPrompt, systemPrompt);
+    
+    res.json({ improvedPrompt: improvedPrompt.trim() });
+  } catch (error) {
+    console.error('Error rewriting prompt:', error);
+    res.status(500).json({ error: 'Failed to rewrite prompt' });
+  }
+});
+
 // Get repositories
 app.post('/api/repos', async (req, res) => {
   try {
