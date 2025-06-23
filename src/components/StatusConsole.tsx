@@ -71,10 +71,10 @@ export function StatusConsole({ status }: StatusConsoleProps) {
           <div className="space-y-3">
             {status.map((entry, index) => (
               <div key={index} className="flex items-start space-x-3">
-                <span className="text-slate-500 text-xs mt-1 flex-shrink-0">
+                <span className="text-slate-500 text-xs mt-1 shrink-0">
                   {entry.timestamp}
                 </span>
-                <div className="flex-shrink-0 mt-0.5">
+                <div className="shrink-0 mt-0.5">
                   {getStatusIcon(entry.status)}
                 </div>
                 <div className="flex-1 min-w-0">
