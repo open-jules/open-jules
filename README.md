@@ -9,17 +9,6 @@
 
 Open Jules is a powerful multi-agent automation platform that uses AI agents to automate coding tasks, from planning to pull request creation. Built with React, Node.js, and Ollama.
 
-## 🚀 New Features - Task Queue System
-
-Open Jules now features a robust task queue system that allows you to:
-
-- **Queue Multiple Tasks**: Add multiple tasks to a queue and execute them sequentially
-- **Individual Task Control**: Pause, resume, cancel, or remove individual tasks
-- **Real-time Monitoring**: View detailed logs and progress for each task in real-time
-- **Task Persistence**: Tasks persist across application restarts
-- **Queue Management**: Start, pause, and clear completed tasks from the queue
-- **Individual Console Viewing**: Open detailed console views for each task with export functionality
-
 ## Who is Open Jules For?
 
 Open Jules is a great fit for:
