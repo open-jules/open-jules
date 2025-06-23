@@ -51,7 +51,7 @@ Tasks can be in the following states:
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/open-jules/open-jules
    cd open-jules
    ```
 
