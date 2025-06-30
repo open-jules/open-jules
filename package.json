@@ -20,7 +20,7 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "fs-extra": "^11.3.0",
-    "lucide-react": "^0.522.0",
+    "lucide-react": "^0.525.0",
     "octokit": "^5.0.3",
     "path": "^0.12.7",
     "react": "^19.1.0",
